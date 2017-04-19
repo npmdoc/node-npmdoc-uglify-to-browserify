@@ -1,0 +1,128 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/ForbesLindesay/uglify-to-browserify"
+
+    >uglify-to-browserify (v1.0.2)</a>
+</h1>
+<h4>A transform to make UglifyJS work in browserify.</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.uglify-to-browserify">module uglify-to-browserify</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.uglify-to-browserify.uglify-to-browserify">
+            function <span class="apidocSignatureSpan"></span>uglify-to-browserify
+            <span class="apidocSignatureSpan">(file)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.uglify-to-browserify" id="apidoc.module.uglify-to-browserify">module uglify-to-browserify</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.uglify-to-browserify.uglify-to-browserify" id="apidoc.element.uglify-to-browserify.uglify-to-browserify">
+        function <span class="apidocSignatureSpan"></span>uglify-to-browserify
+        <span class="apidocSignatureSpan">(file)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function transform(file) {
+  if (!/tools\/node\.js$/.test(file.replace(/\\/g,&#x27;/&#x27;))) return new PassThrough();
+  if (cache[file]) return makeStream(cache[file])
+  var uglify = require(file)
+  var src = &#x27;var sys = require(&#x22;util&#x22;);\nvar MOZ_SourceMap = require(&#x22;source-map&#x22;);\nvar UglifyJS = exports;\n&#x27; + uglify.FILES.map
+(function (path) { return fs.readFileSync(path, &#x27;utf8&#x27;) }).join(&#x27;\n&#x27;)
+
+  var ast = uglify.parse(src)
+  ast.figure_out_scope()
+
+  var variables = ast.variables
+    .map(function (node, name) {
+      return name
+    })
+
+  src += &#x27;\n\n&#x27; + variables.map(function (v) { return &#x27;exports.&#x27; + v + &#x27; = &#x27; + v + &#x27;;&#x27; }).join(&#x27;\n&#x27;) + &#x27;\n\n&#x27;
+
+  src += &#x27;exports.AST_Node.warn_function = function (txt) { if (typeof console != &#x22;undefined&#x22; &#x26;&#x26; typeof console.warn === &#x22;function
+&#x22;) console.warn(txt) }\n\n&#x27;
+
+  src += &#x27;exports.minify = &#x27; + uglify.minify.toString() + &#x27;;\n\n&#x27;
+  src += &#x27;exports.describe_ast = &#x27; + uglify.describe_ast.toString() + &#x27;;&#x27;
+
+  // TODO: remove once https://github.com/substack/node-browserify/issues/631 is resolved
+  src = src.replace(/&#x22;for&#x22;/g, &#x27;&#x22;fo&#x22; + &#x22;r&#x22;&#x27;)
+
+  cache[file] = src
+  return makeStream(src);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
